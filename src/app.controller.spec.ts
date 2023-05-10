@@ -15,8 +15,9 @@ describe('AppController', () => {
   });
 
   describe('root', () => {
-    it('should return "Hello World!"', () => {
-      expect(appController.getHello()).toBe('Hello World!');
+    it('should return "Hello Plotly Team!"', () => {
+      console.log('Hello Plotly Team! Thanks for testing!');
+      expect(appController.getHello()).toBe('Hello Plotly Team!');
     });
   });
 });

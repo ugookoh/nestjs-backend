@@ -1,73 +1,220 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# NestJS Backend Engineer Assessment for Plotly
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+This is my submission & documentation for the technical assessment portion of the interview. Looking forward to receiving your feedback!
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
-
-## Description
-
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
-## Installation
+## Installing and running the app
 
 ```bash
+# installation
 $ yarn install
-```
 
-## Running the app
-
-```bash
-# development
-$ yarn run start
-
-# watch mode
+# running the app in development / watch mode
 $ yarn run start:dev
-
-# production mode
-$ yarn run start:prod
 ```
 
-## Test
+## Testing the application
+
+I added custom unit tests for the `Product` and `User` resolvers. You can easily run and inspect these tests by running the following command
 
 ```bash
 # unit tests
 $ yarn run test
-
-# e2e tests
-$ yarn run test:e2e
-
-# test coverage
-$ yarn run test:cov
 ```
 
-## Support
+# GraphQL API Documentation
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+In order to see the documentation, simply run the app by following the steps above and then simply navigate to http://localhost:3000/graphql to see playground and the docs. I also provided documentation below.
 
-## Stay in touch
+## User Methods
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+These are methods that are used to mutate and query the `User` entity
 
-## License
+### Create a user
 
-Nest is [MIT licensed](LICENSE).
+```gql
+mutation {
+  createUser(
+    userInput: { name: "Thomas Stone", age: 20, email: "thomas@gmail.com" }
+  ) {
+    id
+    name
+    age
+    email
+  }
+}
+```
+
+### Get all users in database with details about the products in their orders
+
+```gql
+query {
+  getAllUsers {
+    id
+    name
+    age
+    email
+    order {
+      name
+      price
+    }
+  }
+}
+```
+
+### Get a single user with their orders _(Must have user id)_
+
+```gql
+query {
+  getUserById(id: "df43e926-67d0-4291-bcc9-1145063b9732") {
+    id
+    name
+    age
+    email
+    order {
+      name
+      price
+    }
+  }
+}
+```
+
+### Add a product to a user's list of orders _(Must have user id and product id)_
+
+```gql
+mutation {
+  addProductToUserOrder(
+    userOrderInput: {
+      userId: "af3bb406-b0e1-4fca-aa6e-0cb73e2843fe"
+      productId: "f28faf3e-ad91-41d5-b4f3-412ae52a5e5d"
+    }
+  ) {
+    id
+    name
+    age
+    email
+    order {
+      name
+      price
+    }
+  }
+}
+```
+
+<br/>
+<br/>
+
+## Product Methods
+
+These are methods that are used to mutate and query the `Product` entity
+
+### Create a product
+
+```gql
+mutation {
+  createProduct(productInput: { name: "Honey Nut Cherrios", price: 12.99 }) {
+    id
+    name
+    price
+  }
+}
+```
+
+### Get all products in database _(Add the user field to the query to get all the users that ordered said product)_
+
+```gql
+query {
+  getAllProducts {
+    id
+    name
+    price
+  }
+}
+```
+
+### Get a single product _(Must have user id)_
+
+```gql
+query {
+  getProductById(id: "b526bd17-aa81-4e73-8faf-b637fdf40e6c") {
+    id
+    name
+    price
+  }
+}
+```
+
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+
+## User and Product types
+
+These are types associated with the `User` and `Product` entity
+
+### UserType
+
+```gql
+type User {
+  # This is an autogenerated id
+  id: String!
+  name: String!
+  email: String!
+  age: Int!
+  order: [Product!]
+}
+```
+
+### ProductType
+
+```gql
+type Product {
+  # This is an autogenerated id
+  id: String!
+  name: String!
+  price: Float!
+
+  # Users associated with the product, in case we want to see all the users that ordered that product.
+  user: [User!]
+}
+```
+
+## User and Product inputs
+
+These are inputs associated with the `User` and `Product` entity
+
+### `UserInput`
+
+Data to provide in order to create a user
+
+```gql
+input UserInput {
+  name: String!
+  email: String!
+  age: Float!
+}
+```
+
+### `UserOrderInput`
+
+Data to provide in order to insert a product inside a user's order
+
+```gql
+input UserOrderInput {
+  userId: String!
+  productId: String!
+}
+```
+
+### `ProductInput`
+
+Data to provide in order to create a product
+
+```gql
+input ProductInput {
+  name: String!
+  price: Float!
+}
+```
