@@ -1,6 +1,4 @@
-# NestJS Backend Engineer Assessment for Plotly
-
-This is my submission & documentation for the technical assessment portion of the interview. Looking forward to receiving your feedback!
+# NestJS Backend Engineer
 
 ## Installing and running the app
 
